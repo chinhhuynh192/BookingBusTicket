@@ -1,30 +1,26 @@
-
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
+ */
 package com.busticketbooking.busticketbooking.controllers;
 
-
-
-import com.busticketbooking.busticketbooking.dao.impl.DAO;
-import com.busticketbooking.busticketbooking.models.Account;
-
+import com.busticketbooking.busticketbooking.dao.DAO;
+import com.busticketbooking.busticketbooking.models.Ticket;
+import java.io.IOException;
+import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.io.IOException;
 
 /**
  *
  * @author Admin
  */
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
- */
-
-@WebServlet(name = "LoginControl", urlPatterns = {"/LoginControl"})
-public class LoginControl extends HttpServlet {
+@WebServlet(name = "SearchTicket", urlPatterns = {"/ticket"})
+public class SearchTicket extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -38,22 +34,20 @@ public class LoginControl extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        DAO dao = new DAO();        
-        try {
-            String email = request.getParameter("email");
-            String password = request.getParameter("password");
-            Account a = dao.checkLogin(email, password);
-            
-        if(a==null){
-            request.setAttribute("mess","Địa chỉ email hoặc mật khẩu không đúng" );
-            request.getRequestDispatcher("login.jsp").forward(request, response);
+        DAO dao = new DAO();
+        String ticket = request.getParameter("ticket");
+        Ticket a = dao.checkExistTicket(ticket);
+        if (a == null){
+            request.setAttribute("mess", "Vé không tồn tại");
+            request.getRequestDispatcher("ticket.jsp").forward(request, response);
         }else{
             HttpSession session = request.getSession();
-            session.setAttribute("acc", a);
-            response.sendRedirect("index.jsp");
+            session.setAttribute("ticket", a);
+            request.getRequestDispatcher("ticket.jsp").forward(request, response);
+            session.setMaxInactiveInterval(1);
         }
-        } catch (Exception e) {
-        }
+       
+        
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -96,4 +90,3 @@ public class LoginControl extends HttpServlet {
     }// </editor-fold>
 
 }
-   

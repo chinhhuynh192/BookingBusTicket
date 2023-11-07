@@ -1,30 +1,26 @@
-
+    /*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
+ */
 package com.busticketbooking.busticketbooking.controllers;
 
-
-
-import com.busticketbooking.busticketbooking.dao.impl.DAO;
-import com.busticketbooking.busticketbooking.models.Account;
-
+import com.busticketbooking.busticketbooking.dao.DAO;
+import com.busticketbooking.busticketbooking.models.Route;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import java.io.IOException;
 
 /**
  *
  * @author Admin
  */
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
- */
-
-@WebServlet(name = "LoginControl", urlPatterns = {"/LoginControl"})
-public class LoginControl extends HttpServlet {
+@WebServlet(name = "RouteControl", urlPatterns = {"/route"})
+public class RouteControl extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -35,27 +31,14 @@ public class LoginControl extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        DAO dao = new DAO();        
-        try {
-            String email = request.getParameter("email");
-            String password = request.getParameter("password");
-            Account a = dao.checkLogin(email, password);
-            
-        if(a==null){
-            request.setAttribute("mess","Địa chỉ email hoặc mật khẩu không đúng" );
-            request.getRequestDispatcher("login.jsp").forward(request, response);
-        }else{
-            HttpSession session = request.getSession();
-            session.setAttribute("acc", a);
-            response.sendRedirect("index.jsp");
-        }
-        } catch (Exception e) {
-        }
-    }
-
+   protected void processRequest(HttpServletRequest request, HttpServletResponse response)
+        throws ServletException, IOException {
+    response.setContentType("text/html;charset=UTF-8");
+    DAO dao = new DAO();
+    List<Route> list = dao.getAllRoute();
+    request.setAttribute("listR", list);
+    request.getRequestDispatcher("route.jsp").forward(request, response); 
+}
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
@@ -96,4 +79,3 @@ public class LoginControl extends HttpServlet {
     }// </editor-fold>
 
 }
-   

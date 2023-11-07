@@ -6,6 +6,10 @@ package com.busticketbooking.busticketbooking.dao;
 
 import com.busticketbooking.busticketbooking.dao.impl.DBContext;
 import com.busticketbooking.busticketbooking.models.Account;
+import com.busticketbooking.busticketbooking.models.Route;
+import com.busticketbooking.busticketbooking.models.Ticket;
+import com.busticketbooking.busticketbooking.models.Trip;
+import com.busticketbooking.busticketbooking.models.Vehicle;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -116,26 +120,184 @@ public class DAO {
     }
 }
 
-//    public static List<Account> list = new ArrayList<>();
-//    public int updateAccount(Account account){
-//        for (int i=0; i<list.size(); i++){
-//            if(list.get(i).getPhone().equals(account.getPhone())){
-//                list.set(i, account);
-//                return i;
-//            }
-//        }
-//        return -1;
-//    }
-//    public int save(Account account){
-//        list.add(account);
-//        return 1;
-//    } 
-//    public int delete(String phone){
-//        Account account = checkExistAccount(phone);
-//        if (account != null) {
-//            list.remove(account);
-//            return 1;
-//        }
-//        return 0;
-//    }
+  public Ticket checkExistTicket(String tripId){
+        String query = "SELECT * FROM Trip WHERE trip_id = ? ";
+         try {
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(query);
+            ps.setString(1, tripId);
+            rs = ps.executeQuery();
+            while(rs.next()){
+               return new Ticket(rs.getInt(1),
+                       rs.getInt(2),
+                       rs.getString(3),
+                       rs.getString(4),
+                       rs.getInt(5),
+                       rs.getString(6),
+                       rs.getString(7),
+                       rs.getString(8),
+                       rs.getInt(9));
+            }
+        } catch (Exception e) {
+        }
+        return null;
+    }
+  public List<Route> getAllRoute(){
+        List<Route> list = new ArrayList<>();
+        
+        String query = "select * from Route";
+        try {
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(query);
+            rs = ps.executeQuery();
+            while (rs.next()){
+               list.add(new Route(rs.getInt(1),
+                       rs.getString(2),
+                       rs.getString(3),
+                       rs.getFloat(4),
+                       rs.getFloat(5),
+                       rs.getFloat(6),
+                       rs.getString(7),
+                       rs.getString(8)));
+            }
+        } catch (Exception e) {
+        }
+        return list;
+    }     
+    public static void Route() {
+        DAO dao = new DAO();
+        List<Route> list = dao.getAllRoute();
+        for (Route o : list){
+            System.out.println(o);
+        }
+    }
+    
+    public List<Route> deleteByRouteID(int id ){
+        List<Route> list = new ArrayList<>();
+        
+        String query = "DELETE FROM Route WHERE route_id=?";
+
+        try {
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(query);
+            ps.setInt(1,id);
+            rs = ps.executeQuery();
+            while (rs.next()){
+               list.add(new Route(rs.getInt(1),
+                       rs.getString(2),
+                       rs.getString(3),
+                       rs.getFloat(4),
+                       rs.getFloat(5),
+                       rs.getFloat(6),
+                       rs.getString(7),
+                       rs.getString(8)));
+            }
+        } catch (Exception e) {
+        }
+        return list;
+    }     
+     public List<Route> editByRouteID(int routeId,String origin, String destination, float distance , float duration, float fare, String vehicle, String status ){
+        List<Route> list = new ArrayList<>();
+        
+        String query = "UPDATE Route SET origin = ? ,  destination = ? , distance = ? , duration = ? , fare = ?,  vehicle_type = ? , route_status= ? WHERE route_id = ?" ;
+                        
+
+       try {
+        conn = new DBContext().getConnection();
+        ps = conn.prepareStatement(query);
+        ps.setString(1, origin);
+        ps.setString(2, destination);
+        ps.setFloat(3, distance);
+        ps.setFloat(4, duration);
+        ps.setFloat(5, fare);
+        ps.setString(6, vehicle);
+        ps.setString(7, status);
+        ps.setInt(8, routeId);
+        
+        int rowsAffected = ps.executeUpdate();
+        
+        if (rowsAffected > 0) {
+            // Nếu cập nhật thành công, truy vấn lại dữ liệu tuyến đường đã được chỉnh sửa
+            String selectQuery = "SELECT * FROM Route WHERE route_id = ?";
+            ps = conn.prepareStatement(selectQuery);
+            ps.setInt(1, routeId);
+            rs = ps.executeQuery();
+            
+            while (rs.next()) {
+                list.add(new Route(rs.getInt("route"),
+                                   rs.getString("origin"),
+                                   rs.getString("destination"),
+                                   rs.getFloat("distance"),
+                                   rs.getFloat("duration"),
+                                   rs.getFloat("fare"),
+                                   rs.getString("vehicle_type"),
+                                   rs.getString("route_status")));
+            }
+        }
+    } catch (Exception e) {
+        // Xử lý ngoại lệ (exception) ở đây
+    }
+    
+    return list;
+}
+    public List<Vehicle> getAllVehicle(){
+        List<Vehicle> list = new ArrayList<>();
+        
+        String query = "select * from Vehicle";
+        try {
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(query);
+            rs = ps.executeQuery();
+            while (rs.next()){
+               list.add(new Vehicle(rs.getInt(1),
+                       rs.getString(2),
+                       rs.getString(3),
+                       rs.getString(4),
+                       rs.getInt(5),
+                       rs.getString(6)));
+            }
+        } catch (Exception e) {
+        }
+        return list;
+    }     
+    public static void Vehicle(){
+        DAO dao = new DAO();
+        List<Vehicle> list = dao.getAllVehicle();
+        for (Vehicle o : list){
+            System.out.println(o);
+        }
+    }
+    
+    public List<Ticket> getAllTrip(){
+        List<Ticket> list = new ArrayList<>();
+        
+        String query = "select * from Trip";
+        try {
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(query);
+            rs = ps.executeQuery();
+            while (rs.next()){
+               list.add(new Ticket(rs.getInt(1),
+                       rs.getInt(2),
+                       rs.getString(3),
+                       rs.getString(4),
+                       rs.getInt(5),
+                       rs.getString(6),
+                       rs.getString(7),
+                       rs.getString(8),
+                       rs.getInt(9)));
+                      
+            }
+        } catch (Exception e) {
+        }
+        return list;
+    }     
+    public static void Trip(){
+        DAO dao = new DAO();
+        List<Ticket> list = dao.getAllTrip();
+        for (Ticket o : list){
+            System.out.println(o);
+        }
+    }
+    
 }

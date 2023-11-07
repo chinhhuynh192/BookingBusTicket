@@ -1,3 +1,11 @@
+<%-- 
+    Document   : login
+    Created on : Sep 22, 2023, 3:20:27 PM
+    Author     : Admin
+--%>
+
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -80,7 +88,7 @@ html,body{
 .slide-controls .slider-tab{
   position: absolute;
   height: 100%;
-  width: 50%;
+  width: 100%;
   left: 0;
   z-index: 0;
   border-radius: 15px;
@@ -212,48 +220,41 @@ a:hover{
  <div class="wrapper">
       <div class="title-text">
         <div class="title login">DN BUS</div>
-        <div class="title signup">DN BUS</div>
       </div>
       <div class="form-container">
         <div class="slide-controls">
           <input type="radio" name="slide" id="login" checked>
-          <input type="radio" name="slide" id="signup">
-          <label for="login" class="slide login">Đăng nhập</label>
-          <label for="signup" class="slide signup">Đăng kí</label>
+          <label for="login" class="slide login">Tra cứu vé</label>
           <div class="slider-tab"></div>
         </div>
+        <c:if test="${sessionScope.ticket == null}">
         <div class="form-inner">
-          <form action="#" class="login">
+          <form action="/ticket">
             <div class="field">
-              <input type="text" placeholder="Số điện thoại" required>
+              <input type="text" name="ticket" placeholder="Nhập mã vé đã đặt" required>
+                            <p class="text-danger" style="color:red">${mess}</p>
             </div>
-            <div class="field">
-              <input type="password" placeholder="Mật khẩu" required>
-            </div>
-            <div class="pass-link"><a href="#">Quên mật khẩu?</a></div>
-            <div class="field btn">
+                <div class="field btn">
               <div class="btn-layer"></div>
-              <input type="submit" value="Đăng nhập">
+              <input type="submit" value="Tìm kiếm">
             </div>
-            <div class="signup-link">Chưa có tài khoản? <a href="">Đăng kí ngay</a></div>
-             <div class="house"><a href="index.jsp"><i class="fas fa-home"></i>Trở về trang chủ</a></div>
+                 <div class="house">    
+              <a href="index.jsp"><i class="fas fa-home"></i>Trở về trang chủ</a></div>
           </form>
-          <form action="#" class="signup">
+        </c:if>        
+            <c:if test="${sessionScope.ticket != null}">
+                
             <div class="field">
-              <input type="text" placeholder="Số điện thoại" required>
-            </div>
-            <div class="field">
-              <input type="password" placeholder="Mật khẩu" required>
-            </div>
-            <div class="field">
-              <input type="password" placeholder="Xác nhận mật khẩu" required>
-            </div>
-            <div class="field btn">
-              <div class="btn-layer"></div>
-              <input type="submit" value="Đăng kí">
-            </div>
-              <div class="house"><a href="index.jsp"><i class="fas fa-home"></i>Trở về trang chủ</a></div>
-          </form>
+               <p>ID: ${sessionScope.ticket.tripId}</p>
+               <p>Date: ${sessionScope.ticket.date}</p>
+               <p>Time: ${sessionScope.ticket.time}</p>
+               <p>Quantity: ${sessionScope.ticket.quantity}</p>
+               <p>Seating: ${sessionScope.ticket.seating}</p>
+               <p>Vehicle: ${sessionScope.ticket.vehicleId}</p>
+               <p>Status: ${sessionScope.ticket.status}</p>
+         <a href="index.jsp"><i class="fas fa-home"></i>Trở về trang chủ</a></div>
+            </c:if>
+<!--            session code-->
         </div>
       </div>
     </div>

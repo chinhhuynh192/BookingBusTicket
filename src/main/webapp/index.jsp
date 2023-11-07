@@ -57,9 +57,9 @@
                 </div>
                 <div class="row">
             <div class="col-sm-12">
-                <a href="index.html"><img src="image/logo.png" class="logo"></a>
+                <a href="index.jsp"><img src="image/logo.png" class="logo"></a>
                 <div class="home"><a href="">Trang chủ  </a></div>
-                <div class="search-ticket"><a href="ticket">Tra cứu vé</a></div>
+                <div class="search-ticket"><a href="ticket.jsp">Tra cứu vé</a></div>
                 <div class="new"><a href="">Tin tức</a></div>
                <c:if test="${sessionScope.acc.role == 'customer'}">
                 <div class="contact"><a href="">Vé của tôi</a></div>
@@ -327,7 +327,7 @@
         <div class="grid-item1">
           <ul>
             <li>
-              <a href="http://127.0.0.1:5500/BookingTicket/html/index.html">Liên hệ với chúng tôi</a>
+              <a href="http://127.0.0.1:5500/BookingTicket/html/index.jsp">Liên hệ với chúng tôi</a>
               
             </li>
             <li>Địa chỉ các văn phòng nhà xe:</li>
@@ -342,12 +342,12 @@
         <div class="grid-item1">
           <ul>
             
-            <li><a href="http://127.0.0.1:5500/BookingTicket/html/index.html">Đăng ký nhận tin</a></li>
+            <li><a href="http://127.0.0.1:5500/BookingTicket/html/index.jsp">Đăng ký nhận tin</a></li>
             <li>ĐĂNG KÝ NHẬN BẢN TIN KHUYẾN MÃI</li>
             <li>
               <form>
                 <input placeholder="Nhập địa chỉ email" />
-                <div class="register"><button><a href="http://127.0.0.1:5500/BookingTicket/html/index.html">Đăng ký</a></button></div>
+                <div class="register"><button><a href="http://127.0.0.1:5500/BookingTicket/html/index.jsp">Đăng ký</a></button></div>
                 
               </form>
             </li>
